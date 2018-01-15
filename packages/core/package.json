@@ -1,0 +1,9 @@
+{
+  "name": "@inless/core",
+  "version": "0.0.0",
+  "main": "dist/bundle.js",
+  "types": "dist/index.d.ts",
+  "author": "Vlad Sydorenko",
+  "license": "MIT",
+  "private": true
+}
