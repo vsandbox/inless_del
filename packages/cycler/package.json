@@ -1,14 +1,13 @@
 {
-  "name": "@inless/editor",
+  "name": "@inless/cycler",
   "version": "0.0.0",
+  "description": "Stream-based module cycler (inspired by cyclejs)",
   "main": "dist/bundle.js",
   "types": "dist/index.d.ts",
   "author": "Vlad Sydorenko",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@inless/core": "^0.0.0",
-    "@inless/cycler": "^0.0.0",
-    "@inless/ui": "^0.0.0"
+    "rxjs": "^5.5.6"
   }
 }

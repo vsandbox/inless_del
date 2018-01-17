@@ -50,6 +50,7 @@ const makeConfig = ({ name, buildHTML, useExternals }) => {
 
 module.exports = [
     makeConfig({ name: 'core', useExternals: true }),
+    makeConfig({ name: 'cycler', useExternals: true }),
     makeConfig({ name: 'ui', useExternals: true }),
-    makeConfig({ name: 'editor', buildHTML: true, useExternals: true })
+    makeConfig({ name: 'editor', useExternals: true, buildHTML: true }),
 ];

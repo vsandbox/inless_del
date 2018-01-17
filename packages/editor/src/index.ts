@@ -1,3 +1,37 @@
-import { ui } from '@inless/ui';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+import { merge } from 'rxjs/observable/merge';
+import { interval } from 'rxjs/observable/interval';
+import { run } from '@inless/cycler';
 
-console.log('It actually works', ui());
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/publish';
+
+interface IModule {
+    test: Observable<string>;
+}
+
+interface IDriver {
+    name: Observable<string>;
+}
+
+interface IDriverMock {
+    name: Subject<string>;
+}
+
+const moduleFn = ({ test }: IModule) => {
+    return {
+        name: test.map(value => `From module ${value}`),
+    };
+};
+
+const driver = ({ name }: IDriver) => {
+    name.subscribe(value => console.log(`module said ${value}`));
+    return {
+        test: interval(500).map(v => `Hi Module${v}`),
+    };
+};
+
+const mock = () => ({ name: new Subject<string>() });
+
+run<IModule, IDriver>(moduleFn, driver, mock);
