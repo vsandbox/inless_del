@@ -10,7 +10,6 @@
     "dev": "webpack --watch"
   },
   "devDependencies": {
-    "css-loader": "^0.28.9",
     "html-webpack-plugin": "^2.30.1",
     "lerna": "^2.7.0",
     "postcss-cssnext": "^3.0.2",

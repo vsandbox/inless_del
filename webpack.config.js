@@ -14,6 +14,7 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
             include: path.join(__dirname, `packages/${name}/src`),
             use: [
                 'style-loader',
+                'ts-cssdts-loader/src/cssLoader',
                 {
                     loader: 'typings-for-css-modules-loader',
                     options: {
@@ -40,7 +41,7 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
             aggregateTimeout: 300,
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.json'],
+            extensions: ['.ts', '.tsx', '.js', '.json', '.css'],
         },
         module: {
             rules: [
@@ -52,6 +53,9 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
                             options: {
                                 configFile: path.join(__dirname, `tsconfig.${name}.json`)
                             }
+                        },
+                        {
+                            loader: path.join(__dirname, 'ts-cssdts-loader'),
                         }
                     ]
                 },
@@ -66,7 +70,7 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
         plugins: [
             new webpack.WatchIgnorePlugin([
                 path.join(__dirname, `./packages/${name}/dist`),
-                /\.d\.ts$/,
+                // /\.d\.ts$/,
                 /index\.html$/,
                 /bundle\.js$/,
                 /bundle\.js\.map$/,
