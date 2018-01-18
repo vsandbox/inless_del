@@ -9,6 +9,8 @@
         "no-any": false,
         "ordered-imports": false,
         "arrow-parens": false,
+        "no-unused-expression": true,
+        "no-unused-variable": true,
         "trailing-comma": [
             true,
             {
