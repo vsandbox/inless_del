@@ -1,6 +1,5 @@
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
 import { interval } from 'rxjs/observable/interval';
 import { run } from '@inless/cycler';
 
@@ -13,10 +12,6 @@ interface IModule {
 
 interface IDriver {
     name: Observable<string>;
-}
-
-interface IDriverMock {
-    name: Subject<string>;
 }
 
 const moduleFn = ({ test }: IModule) => {

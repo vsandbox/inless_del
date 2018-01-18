@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const makeConfig = ({ name, buildHTML, useExternals, css }) => {
+const makeConfig = ({ name, buildHTML, useExternals, css, tsx }) => {
     const plugins = buildHTML ? [
         new HtmlWebpackPlugin({
             template: `packages/${name}/src/index.tpl.html`
@@ -27,10 +27,12 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
         }
     ] : [];
 
+    const ext = tsx ? 'tsx' : 'ts';
+
     return {
         devtool: 'source-map',
         target: 'web',
-        entry: `./packages/${name}/src/index.ts`,
+        entry: `./packages/${name}/src/index.${ext}`,
         output: {
             path: path.join(__dirname, `./packages/${name}/dist`),
             filename: `bundle.js`,
@@ -85,6 +87,6 @@ const makeConfig = ({ name, buildHTML, useExternals, css }) => {
 module.exports = [
     makeConfig({ name: 'core', useExternals: true }),
     makeConfig({ name: 'cycler', useExternals: true }),
-    makeConfig({ name: 'ui', useExternals: true, css: true, buildHTML: true }),
+    makeConfig({ name: 'ui', useExternals: true, css: true, tsx: true, buildHTML: true }),
     makeConfig({ name: 'editor', useExternals: true, buildHTML: true }),
 ];
