@@ -1,31 +1,30 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { UIScene, IUISceneProps, IUIRendererProps } from './common/UIScene/UIScene';
+import { UIScene, IUISceneProps } from './common/UIScene/UIScene';
 
-const nodes = [
-    {
-        id: 'ben',
-        renderer: 'box',
-        className: 'test',
-        data: {
-            name: 'Beniamin',
+const sceneProps: IUISceneProps = {
+    nodes: [
+        {
+            id: 'test',
+            renderer: 'test',
+            className: 'helloWorld',
+            data: {
+                name: 'John',
+            },
         },
+        {
+            id: 'test2',
+            renderer: 'test2',
+            className: 'helloWorld',
+            data: {
+                name: 'John',
+            },
+        },
+    ],
+    renderers: {
+        test: ({ className, data }) => <div className={className}>Hi, {data.name}</div>,
     },
-];
-
-const renderers = {
-    test: ({ data, className }: IUIRendererProps) => {
-        return <div className={className}>Node: { data.name }</div>;
-    },
-    box: (options: IUIRendererProps) => {
-        console.log(options);
-        return <div className={options.className}>In the box is { options.data.name }</div>;
-    },
+    NodeContainerRenderer: () => <div>There is something</div>,
 };
 
-const props: IUISceneProps = {
-    items: nodes,
-    renderers,
-};
-
-render(<UIScene {...props} />, document.getElementById('app'));
+render(<UIScene {...sceneProps} />, document.getElementById('app'));

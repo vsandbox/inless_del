@@ -7,9 +7,11 @@
   "private": true,
   "scripts": {
     "init": "lerna bootstrap",
-    "dev": "webpack --watch"
+    "dev": "webpack --watch",
+    "server": "node test-server"
   },
   "devDependencies": {
+    "express": "^4.16.2",
     "html-webpack-plugin": "^2.30.1",
     "lerna": "^2.7.0",
     "postcss-cssnext": "^3.0.2",

@@ -1,70 +1,50 @@
 import * as React from 'react';
+import { UISceneNode, IUISceneNodeProps } from './UISceneNode';
+import { UISceneNodeError, IUISceneNodeErrorProps } from './UISceneNodeError';
+import { IUIRenderer } from '../../interfaces/IUIRenderer';
+import { EUISceneError } from '../../interfaces/EUISceneError';
 
-export interface IUIRendererProps {
+export interface IUISceneNode {
+    // You could use other way if you pass getId method to UIScene props
+    id?: string;
     data: any;
-    x?: number;
-    y?: number;
-    isSelected?: boolean;
+    renderer: string;
     className?: string;
-    onSelect?: (id: string) => void;
-    [others: string]: any;
 }
 
-export declare type IUIRenderer<T> = React.StatelessComponent<T> | (new(...args: any[]) => React.Component<T | any>);
-
-export interface IUISceneItem {
-    id: string;
-    renderer: string;
+export interface IUISceneRendererProps {
     data: any;
-    x?: number;
-    y?: number;
-    isSelected?: boolean;
-    className?: string;
+    className: string;
 }
 
 export interface IUISceneProps {
-    // only god knows what is it. I mean, types are up to you
-    items: IUISceneItem[];
-    // set of any valid react element
-    renderers: { [key: string]: IUIRenderer<IUIRendererProps>; };
-    // optional handler when item is selected (if renderer supports)
-    onSelect?: (id: string) => void;
-    // top-level class name
-    className?: string;
-    // override default container
-    // by default all nodes wil be rendered in simple div element
-    Container?: IUIRenderer<{ className?: string }>;
+    nodes: IUISceneNode[];
+    renderers: { [id: string]: IUIRenderer<IUISceneRendererProps>; };
+    getId?: (node: IUISceneNode) => string;
+    ErrorRenderer?: IUIRenderer<IUISceneNodeErrorProps>;
+    NodeContainerRenderer?: IUIRenderer<IUISceneNodeProps>;
 }
 
-export class UIScene extends React.PureComponent<IUISceneProps> {
+export class UIScene extends React.Component<IUISceneProps> {
     public render() {
-        const { items, renderers, className, onSelect, Container } = this.props;
+        const { nodes, renderers, getId, NodeContainerRenderer } = this.props;
+        const nodeElements = nodes.map((node, index) => {
+            const { id, renderer, data, className } = node;
+            const nodeId = (getId ? getId(node) : id) || `index_${index}`;
+            const nodeRenderer = renderers[renderer];
 
-        const itemElements = items.map(item => {
-            const {
-                id,
-                renderer,
-                data,
-                x,
-                y,
-                isSelected,
-                className: itemClassName,
-            } = item;
-            const Renderer = renderers[renderer];
+            if (!nodeRenderer) {
+                const ErrorRenderer = this.props.ErrorRenderer || UISceneNodeError;
+                return <ErrorRenderer
+                    key={nodeId}
+                    code={EUISceneError.RENDERER_NOT_FOUND}
+                    message={`Error: renderer for node "${nodeId}" not found`}
+                />;
+            }
 
-            const props: IUIRendererProps = {
-                data,
-                onSelect,
-                x: x || 0,
-                y: y || 0,
-                isSelected: !!isSelected,
-                className: itemClassName,
-            };
-
-            return <Renderer key={id} {...props} />;
+            const NodeRenderer = NodeContainerRenderer || UISceneNode;
+            return <NodeRenderer key={nodeId} className={className} data={data} renderer={renderers[renderer]} />;
         });
-
-        if (Container) return <Container className={className}>{ itemElements }</Container>;
-        return <div className={className}>{ itemElements }</div>;
+        return <div>{nodeElements}</div>;
     }
 }
